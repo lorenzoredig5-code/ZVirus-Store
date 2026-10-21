@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Play Store - Site Oficial</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 30px; position: relative; }
+        .btn-top-right { position: absolute; right: 20px; top: 0; background: #007bff; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .search-bar { width: 100%; max-width: 500px; padding: 12px; border-radius: 25px; border: 1px solid #444; background: #1e1e1e; color: #fff; font-size: 16px; outline: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+        .app-box { background: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; }
+        .creator { color: #3498db; cursor: pointer; font-size: 14px; margin: 10px 0; display: inline-block; }
+        .creator:hover { text-decoration: underline; }
+        .btn-download { display: block; text-align: center; background: #2ecc71; color: #fff; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+        .btn-dev { display: block; text-align: center; background: #e67e22; color: #fff; padding: 10px; border-radius: 4px; font-weight: bold; }
+        
+        /* Modal de Login / Painel flutuante no site oficial */
+        .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: #1e1e1e; padding: 30px; border-radius: 8px; width: 380px; position: relative; box-sizing: border-box; }
+        .close-btn { position: absolute; right: 15px; top: 10px; font-size: 20px; cursor: pointer; color: #aaa; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #333; background: #2e2e2e; color: #fff; box-sizing: border-box; }
+        .link { color: #3498db; cursor: pointer; font-size: 14px; text-align: center; margin-top: 10px; display: block; }
+        .account-item { background: #2a2a2a; padding: 10px; margin-top: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="btn-top-right" onclick="abrirLogin()">Login / Painel</button>
+    <h1>Play Store Oficial</h1>
+    <p style="color: #aaa;">Baixe aplicativos ou pesquise pelo nome, inicial ou criador</p>
+    <input type="text" id="searchInput" class="search-bar" placeholder="Pesquisar aplicativo ou criador..." onkeyup="filtrarApps()">
+</header>
+
+<div class="grid" id="app-grid">
+    <!-- Exemplo de App 1: Lançado -->
+    <div class="app-box" data-nome="Super Utilitário" data-criador="CarlosDev">
+        <div>
+            <h3>Super Utilitário</h3>
+            <p style="color: #aaa; font-size: 14px;">Um app rápido e prático para o dia a dia.</p>
+            <span class="creator" onclick="filtrarPorCriador('CarlosDev')">Criado por: CarlosDev</span>
+        </div>
+        <a href="https://www.mediafire.com" target="_blank" class="btn-download">Instalar / Baixar APK</a>
+    </div>
+
+    <!-- Exemplo de App 2: Em Desenvolvimento -->
+    <div class="app-box" data-nome="Jogo Zombie 3D" data-criador="BelaGames">
+        <div>
+            <h3>Jogo Zombie 3D</h3>
+            <p style="color: #aaa; font-size: 14px;">Em breve na sua tela, aguarde.</p>
+            <span class="creator" onclick="filtrarPorCriador('BelaGames')">Criado por: BelaGames</span>
+        </div>
+        <div class="btn-dev">Em Desenvolvimento</div>
+    </div>
+</div>
+
+<!-- MODAL DE LOGIN / RECUPERAÇÃO NO SITE OFICIAL -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="fecharLogin()">&times;</span>
+        
+        <!-- Tela Login -->
+        <div id="div-login">
+            <h2>Login</h2>
+            <input type="email" placeholder="Seu E-mail">
+            <input type="password" placeholder="Sua Senha">
+            <button style="background: #007bff;" onclick="irParaPainel()">Entrar</button>
+            <span class="link" onclick="mudarModal('esqueci')">Esqueci a senha</span>
+        </div>
+
+        <!-- Tela Esqueci a Senha -->
+        <div id="div-esqueci" style="display: none;">
+            <h2>Recuperar Senha</h2>
+            <input type="email" id="email-rec" placeholder="Digite seu e-mail cadastrado">
+            <button style="background: #007bff;" onclick="buscarContasEmail()">Continuar</button>
+            <span class="link" onclick="mudarModal('login')">Voltar ao login</span>
+        </div>
+
+        <!-- Tela Contas Vinculadas -->
+        <div id="div-contas" style="display: none;">
+            <h2>Contas Vinculadas</h2>
+            <p style="font-size: 13px; color: #aaa;">Contas encontradas neste e-mail:</p>
+            <div class="account-item">
+                <span>usuario_um@email.com</span>
+                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail enviado!')">Trocar</button>
+            </div>
+            <div class="account-item">
+                <span>usuario_dois@email.com</span>
+                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail enviado!')">Trocar</button>
+            </div>
+            <span class="link" onclick="mudarModal('login')" style="margin-top: 15px;">Voltar ao login</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filtro de pesquisa e criador
+    function filtrarApps() {
+        let termo = document.getElementById('searchInput').value.toLowerCase();
+        let cards = document.getElementsByClassName('app-box');
+        
+        for (let i = 0; i < cards.length; i++) {
+            let nome = cards[i].getAttribute('data-nome').toLowerCase();
+            let criador = cards[i].getAttribute('data-criador').toLowerCase();
+            if (nome.includes(termo) || criador.includes(termo)) {
+                cards[i].style.display = "flex";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    function filtrarPorCriador(nomeUsuario) {
+        document.getElementById('searchInput').value = nomeUsuario;
+        filtrarApps();
+    }
+
+    // Controle do Modal de Login
+    function abrirLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+    function fecharLogin() { document.getElementById('loginModal').style.display = 'none'; }
+    
+    function mudarModal(tela) {
+        document.getElementById('div-login').style.display = 'none';
+        document.getElementById('div-esqueci').style.display = 'none';
+        document.getElementById('div-contas').style.display = 'none';
+        
+        if(tela === 'login') document.getElementById('div-login').style.display = 'block';
+        if(tela === 'esqueci') document.getElementById('div-esqueci').style.display = 'block';
+        if(tela === 'contas') document.getElementById('div-contas').style.display = 'block';
+    }
+
+    function buscarContasEmail() {
+        if(document.getElementById('email-rec'].value !== "") {
+            mudarModal('contas');
+        } else {
+            alert('Digite um e-mail');
+        }
+    }
+
+    function irParaPainel() {
+        // Redireciona para o painel de criação/gerenciamento de apps
+        window.location.href = 'painel.html';
+    }
+</script>
+
+</body>
+</html>
