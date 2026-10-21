@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Minha Play Store - Site Oficial</title>
+    <title>Play Store Global</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121212; color: #fff; margin: 0; padding: 20px; }
         header { text-align: center; margin-bottom: 30px; position: relative; }
-        .btn-top-right { position: absolute; right: 20px; top: 0; background: #007bff; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-top { position: absolute; right: 20px; top: 0; background: #007bff; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .search-bar { width: 100%; max-width: 500px; padding: 12px; border-radius: 25px; border: 1px solid #444; background: #1e1e1e; color: #fff; font-size: 16px; outline: none; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
         .app-box { background: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; }
@@ -15,8 +15,8 @@
         .btn-download { display: block; text-align: center; background: #2ecc71; color: #fff; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: bold; }
         .btn-dev { display: block; text-align: center; background: #e67e22; color: #fff; padding: 10px; border-radius: 4px; font-weight: bold; }
         
-        /* Modal de Login / Painel flutuante no site oficial */
-        .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        /* Modal de Login igual ao painel */
+        .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
         .modal-content { background: #1e1e1e; padding: 30px; border-radius: 8px; width: 380px; position: relative; box-sizing: border-box; }
         .close-btn { position: absolute; right: 15px; top: 10px; font-size: 20px; cursor: pointer; color: #aaa; }
         input, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #333; background: #2e2e2e; color: #fff; box-sizing: border-box; }
@@ -27,49 +27,52 @@
 <body>
 
 <header>
-    <button class="btn-top-right" onclick="abrirLogin()">Login / Painel</button>
-    <h1>Play Store Oficial</h1>
-    <p style="color: #aaa;">Baixe aplicativos ou pesquise pelo nome, inicial ou criador</p>
+    <button class="btn-top" onclick="abrirLogin()">Login / Painel ADM</button>
+    <h1>Play Store Global</h1>
+    <p style="color: #aaa;">Pesquise por nome, inicial ou criador de qualquer app</p>
     <input type="text" id="searchInput" class="search-bar" placeholder="Pesquisar aplicativo ou criador..." onkeyup="filtrarApps()">
 </header>
 
+<!-- Vitrine de Apps Global (Simulando Firebase) -->
 <div class="grid" id="app-grid">
-    <!-- Exemplo de App 1: Lançado -->
-    <div class="app-box" data-nome="Super Utilitário" data-criador="CarlosDev">
+    <div class="app-box" data-nome="Hacker Tool" data-criador="DevMaster">
         <div>
-            <h3>Super Utilitário</h3>
-            <p style="color: #aaa; font-size: 14px;">Um app rápido e prático para o dia a dia.</p>
-            <span class="creator" onclick="filtrarPorCriador('CarlosDev')">Criado por: CarlosDev</span>
+            <h3>Hacker Tool</h3>
+            <p style="color: #aaa; font-size: 14px;">Ferramenta avançada de testes.</p>
+            <p style="color: #e74c3c; font-size: 12px;">⚠️ Exclui dados do celular: Sim</p>
+            <span class="creator" onclick="filtrarPorCriador('DevMaster')">Criado por: DevMaster</span>
         </div>
-        <a href="https://www.mediafire.com" target="_blank" class="btn-download">Instalar / Baixar APK</a>
+        <!-- Ao clicar, simula a contagem de 1 centavo para o criador no Firebase -->
+        <a href="https://www.mediafire.com" target="_blank" class="btn-download" onclick="registrarInstalacao('DevMaster')">Instalar APP (+R$ 0,01 para o criador)</a>
     </div>
 
-    <!-- Exemplo de App 2: Em Desenvolvimento -->
-    <div class="app-box" data-nome="Jogo Zombie 3D" data-criador="BelaGames">
+    <div class="app-box" data-nome="Painel VIP" data-criador="ScriptKing">
         <div>
-            <h3>Jogo Zombie 3D</h3>
-            <p style="color: #aaa; font-size: 14px;">Em breve na sua tela, aguarde.</p>
-            <span class="creator" onclick="filtrarPorCriador('BelaGames')">Criado por: BelaGames</span>
+            <h3>Painel VIP</h3>
+            <p style="color: #aaa; font-size: 14px;">Ainda em fase de testes.</p>
+            <p style="color: #2ecc71; font-size: 12px;">⚠️ Exclui dados do celular: Não</p>
+            <span class="creator" onclick="filtrarPorCriador('ScriptKing')">Criado por: ScriptKing</span>
         </div>
+        <!-- Como está em desenvolvimento, não tem botão de instalar -->
         <div class="btn-dev">Em Desenvolvimento</div>
     </div>
 </div>
 
-<!-- MODAL DE LOGIN / RECUPERAÇÃO NO SITE OFICIAL -->
+<!-- MODAL DE LOGIN / ESQUECI A SENHA (GLOBAL) -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="fecharLogin()">&times;</span>
         
-        <!-- Tela Login -->
+        <!-- Tela de Login -->
         <div id="div-login">
-            <h2>Login</h2>
-            <input type="email" placeholder="Seu E-mail">
-            <input type="password" placeholder="Sua Senha">
-            <button style="background: #007bff;" onclick="irParaPainel()">Entrar</button>
+            <h2>Login ADM</h2>
+            <input type="email" placeholder="E-mail">
+            <input type="password" placeholder="Senha">
+            <button style="background: #007bff;" onclick="irParaPainel()">Entrar no Painel</button>
             <span class="link" onclick="mudarModal('esqueci')">Esqueci a senha</span>
         </div>
 
-        <!-- Tela Esqueci a Senha -->
+        <!-- Tela Esqueci a Senha (Busca Contas no E-mail) -->
         <div id="div-esqueci" style="display: none;">
             <h2>Recuperar Senha</h2>
             <input type="email" id="email-rec" placeholder="Digite seu e-mail cadastrado">
@@ -77,17 +80,17 @@
             <span class="link" onclick="mudarModal('login')">Voltar ao login</span>
         </div>
 
-        <!-- Tela Contas Vinculadas -->
+        <!-- Lista de Contas Encontradas no E-mail -->
         <div id="div-contas" style="display: none;">
             <h2>Contas Vinculadas</h2>
-            <p style="font-size: 13px; color: #aaa;">Contas encontradas neste e-mail:</p>
+            <p style="font-size: 13px; color: #aaa;">Múltiplas contas encontradas neste e-mail:</p>
             <div class="account-item">
-                <span>usuario_um@email.com</span>
-                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail enviado!')">Trocar</button>
+                <span>conta1@email.com</span>
+                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail de troca de senha enviado!')">Trocar</button>
             </div>
             <div class="account-item">
-                <span>usuario_dois@email.com</span>
-                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail enviado!')">Trocar</button>
+                <span>conta2@email.com</span>
+                <button style="width: auto; padding: 5px; background: #2ecc71;" onclick="alert('E-mail de troca de senha enviado!')">Trocar</button>
             </div>
             <span class="link" onclick="mudarModal('login')" style="margin-top: 15px;">Voltar ao login</span>
         </div>
@@ -95,19 +98,14 @@
 </div>
 
 <script>
-    // Filtro de pesquisa e criador
+    // Filtros
     function filtrarApps() {
         let termo = document.getElementById('searchInput').value.toLowerCase();
         let cards = document.getElementsByClassName('app-box');
-        
         for (let i = 0; i < cards.length; i++) {
             let nome = cards[i].getAttribute('data-nome').toLowerCase();
             let criador = cards[i].getAttribute('data-criador').toLowerCase();
-            if (nome.includes(termo) || criador.includes(termo)) {
-                cards[i].style.display = "flex";
-            } else {
-                cards[i].style.display = "none";
-            }
+            cards[i].style.display = (nome.includes(termo) || criador.includes(termo)) ? "flex" : "none";
         }
     }
 
@@ -116,33 +114,27 @@
         filtrarApps();
     }
 
-    // Controle do Modal de Login
+    // Sistema de 1 centavo (Simulando Firebase Backend)
+    function registrarInstalacao(criador) {
+        // No Firebase real, aqui você faria um transaction/increment no saldo do criador:
+        // firebase.database().ref('usuarios/' + criador + '/saldo').transaction(s => (s || 0) + 0.01);
+        console.log("Instalação registrada! +R$ 0,01 adicionado para: " + criador);
+    }
+
+    // Modals
     function abrirLogin() { document.getElementById('loginModal').style.display = 'flex'; }
     function fecharLogin() { document.getElementById('loginModal').style.display = 'none'; }
-    
     function mudarModal(tela) {
         document.getElementById('div-login').style.display = 'none';
         document.getElementById('div-esqueci').style.display = 'none';
         document.getElementById('div-contas').style.display = 'none';
-        
-        if(tela === 'login') document.getElementById('div-login').style.display = 'block';
-        if(tela === 'esqueci') document.getElementById('div-esqueci').style.display = 'block';
-        if(tela === 'contas') document.getElementById('div-contas').style.display = 'block';
+        document.getElementById('div-' + tela).style.display = 'block';
     }
-
     function buscarContasEmail() {
-        if(document.getElementById('email-rec'].value !== "") {
-            mudarModal('contas');
-        } else {
-            alert('Digite um e-mail');
-        }
+        if(document.getElementById('email-rec').value !== "") mudarModal('contas');
+        else alert('Digite o e-mail');
     }
-
-    function irParaPainel() {
-        // Redireciona para o painel de criação/gerenciamento de apps
-        window.location.href = 'painel.html';
-    }
+    function irParaPainel() { window.location.href = 'painel.html'; }
 </script>
-
 </body>
 </html>
